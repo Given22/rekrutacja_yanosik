@@ -120,7 +120,7 @@ label, .info{
   font-weight: 600;
   cursor: pointer;
   text-align: start;
-  width: 40%;
+  min-width: 40%;
   &:active{
     color: #969696de;
   }
