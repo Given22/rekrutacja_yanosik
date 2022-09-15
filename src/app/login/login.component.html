@@ -1,0 +1,97 @@
+<div class="app">
+  <!-- Loga, zależne od szerokości okna -->
+  <div class="logos">
+    <img class="logo_desktop" src="/assets/imgs/yanosik-logo-desktop.png" alt="logo_desktop">
+    <img class="logo_mobile" src="/assets/imgs/yanosik-logo-mobile.png" alt="logo_mobile">
+  </div>
+  <!-- Sekcja formularza -->
+  <div class="loginSection">
+    <form class="loginForm" [formGroup]="loginForm" (ngSubmit)="onSubmitForm()">
+
+      <!-- Mail -->
+      <div class="loginForm_mail">
+        <input class="textInput" placeholder="Adres e-mail" formControlName="email" required>
+        <!-- Teksty błędów w mailu-->
+        <div class="loginForm_warnings" *ngIf="loginForm.controls['email'].touched">
+          <p *ngIf="loginForm.controls['email'].hasError('required')">Pole wymagane</p>
+          <p *ngIf="loginForm.controls['email'].hasError('email')">Błąd w składni emaila</p>
+        </div>
+      </div>
+
+      <!-- Hasła -->
+      <div class="loginForm_passwordSection">
+        <!-- Główne hasło, wykorzystywane do obu rodzaji formularza -->
+        <div class="loginForm_password">
+          <input class="textInput" placeholder="Hasło" [type]="showPassword" formControlName="password" required>
+
+          <!-- Teksty błędów w haśle -->
+          <div class="loginForm_warnings" *ngIf="loginForm.controls['password'].touched">
+            <p *ngIf="loginForm.controls['password'].hasError('required')">Pole wymagane</p>
+            <p *ngIf="loginForm.controls['password'].hasError('pattern')">Hasło powinno posiadać przynajmniej 1 małą, 1 dużą literę oraz 1 liczbę.</p>
+            <p *ngIf="loginForm.controls['password'].hasError('minlength')">Hasło musi mieć co najmniej 6 znaków</p>
+          </div>
+        </div>
+
+        <!-- Podwierdzenie hasła tylko podczas rejestracji -->
+        <div *ngIf="formType === 'REGISTER'">
+          <input class="textInput" placeholder="Potwierdź Hasło" [type]="showPassword" formControlName="password_confirm" required>
+
+          <!-- Teksty błędów w haśle potwierdzającym -->
+          <div class="loginForm_warnings" *ngIf="loginForm.controls['password_confirm'].touched">
+            <p *ngIf="loginForm.controls['password_confirm'].hasError('required')">Pole wymagane</p>
+            <p *ngIf="loginForm.controls['password_confirm'].value !== loginForm.controls['password'].value">Hasła się różnią</p>
+          </div>
+        </div>
+
+        <!-- Zmiana widoczności hasła, zmienia typ inputa z textu na password -->
+        <input class="showButton" type="button" [value]='showText'(click)="showPasswordFn()" >
+      </div>
+
+      <!-- Sekcja rzeczy do logowania -->
+      <ng-container *ngIf="formType === 'LOGIN'">
+        <div class="bottomSection"> 
+          <label class="form-control">
+            <input type="checkbox" name="remember_me" formControlName="remember_me"/>
+            Zapamiętaj mnie
+          </label>
+          <button class="submitBtn" type="submit">Zaloguj się</button>
+        </div>
+      </ng-container>
+
+      <!-- Sekcja rzeczy do rejestracji -->
+      <ng-container *ngIf="formType === 'REGISTER'">
+        <div class="bottomSection">
+          <div>
+            <label class="form-control">
+              <input type="checkbox" name="acceptance_regulations" formControlName="acceptance_regulations"/>
+              Akceptuję regulamin
+            </label>
+            <div class="loginForm_warnings">
+              <p *ngIf="loginForm.controls['acceptance_regulations'].hasError('required')">Akceptacja regulaminu jest wymagana</p>
+            </div>
+          </div>
+          <button class="submitBtn" type="submit">Zarejestuj się</button>
+        </div>
+      </ng-container>
+
+    </form>
+
+    <!-- Zmiana rodzaju formularza -->
+
+    <!-- Zmiana na rejestrację -->
+    <ng-container *ngIf="formType === 'LOGIN'">
+      <div class="infoSection">
+        <span class="info">Nie masz jeszcze konta? </span>
+        <button class="infoBtn" (click)="changeFormType()">Zarejestuj się</button>
+      </div>
+    </ng-container>
+
+    <!-- Zmiana na logowanie -->
+    <ng-container *ngIf="formType === 'REGISTER'">
+      <div class="infoSection">
+        <span class="info">Masz już konto? </span>
+        <button class="infoBtn" (click)="changeFormType()">Zaloguj się</button>
+      </div>
+    </ng-container>
+  </div>
+</div>
